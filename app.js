@@ -1,14 +1,11 @@
-// Array para almacenar objetos de productos
 const products = [];
 
-// Función constructora para crear objetos de producto
 function Product(name, category, price) {
     this.name = name;
     this.category = category;
     this.price = price;
 }
 
-// Funciones de orden superior
 function addProduct() {
     const name = prompt('Ingrese el nombre del producto:');
     const category = prompt('Ingrese la categoría del producto:');
@@ -45,7 +42,6 @@ function filterProductsByCategory() {
     alert(`Productos en la categoría ${categoryToFilter}: ${JSON.stringify(filteredProducts, null, 2)}`);
 }
 
-// Ejemplo de uso
 addProduct();
 addProduct();
 findCheapestProduct();
