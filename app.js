@@ -6,18 +6,44 @@ function Product(name, category, price) {
     this.price = price;
 }
 
-function addProduct() {
+function saveProductsToLocalStorage() {
+    const productsJSON = JSON.stringify(products);
+    localStorage.setItem('products', productsJSON);
+}
+
+function loadProductsFromLocalStorage() {
+    const productsJSON = localStorage.getItem('products');
+    if (productsJSON) {
+        products.push(...JSON.parse(productsJSON));
+    }
+}
+
+function updateProductList() {
+    const productListContainer = document.getElementById('productList');
+    productListContainer.innerHTML = '';
+
+    products.forEach(product => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${product.name} - ${product.category} - $${product.price.toFixed(2)}`;
+        productListContainer.appendChild(listItem);
+    });
+}
+
+function handleAddProduct() {
     const name = prompt('Ingrese el nombre del producto:');
     const category = prompt('Ingrese la categoría del producto:');
     const price = parseFloat(prompt('Ingrese el precio del producto:'));
-    
+
     const newProduct = new Product(name, category, price);
     products.push(newProduct);
+
+    saveProductsToLocalStorage();
+    updateProductList();
 
     alert('Producto agregado con éxito.');
 }
 
-function findCheapestProduct() {
+function handleFindCheapestProduct() {
     if (products.length === 0) {
         alert('No hay productos para buscar.');
         return;
@@ -30,7 +56,7 @@ function findCheapestProduct() {
     alert(`El producto más barato es: ${JSON.stringify(cheapestProduct, null, 2)}`);
 }
 
-function filterProductsByCategory() {
+function handleFilterProductsByCategory() {
     const categoryToFilter = prompt('Ingrese la categoría para filtrar los productos:');
     const filteredProducts = products.filter(product => product.category === categoryToFilter);
 
@@ -42,7 +68,11 @@ function filterProductsByCategory() {
     alert(`Productos en la categoría ${categoryToFilter}: ${JSON.stringify(filteredProducts, null, 2)}`);
 }
 
-addProduct();
-addProduct();
-findCheapestProduct();
-filterProductsByCategory();
+document.addEventListener('DOMContentLoaded', () => {
+    loadProductsFromLocalStorage();
+    updateProductList();
+});
+
+document.getElementById('addProductButton').addEventListener('click', handleAddProduct);
+document.getElementById('findCheapestProductButton').addEventListener('click', handleFindCheapestProduct);
+document.getElementById('filterProductsByCategoryButton').addEventListener('click', handleFilterProductsByCategory);
